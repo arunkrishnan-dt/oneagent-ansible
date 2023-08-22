@@ -1,5 +1,5 @@
 - name: OneAgent
-  hosts: automation-target
+  hosts: 20.58.162.9
   vars:    
     environment_url: "tenant_uuid.live.dynatrace.com"
     install_os: "unix"
