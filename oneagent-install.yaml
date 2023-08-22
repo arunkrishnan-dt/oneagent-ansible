@@ -1,0 +1,35 @@
+- name: OneAgent
+  hosts: automation-target
+  vars:    
+    environment_url: "tenant_uuid.live.dynatrace.com"
+    install_os: "unix"
+    paas_token: "paas_token_here"
+  tasks:    
+  # Download OneAgent installer
+    - name: Download OneAgent installer - Latest
+      ansible.builtin.get_url:
+        url: https://{{ environment_url }}/api/v1/deployment/installer/agent/{{ install_os }}/default/latest
+        dest: "/var/tmp/Dynatrace-OneAgent-latest.sh"
+        force: true
+        timeout: 60
+        headers:
+          Authorization: "Api-Token {{ paas_token }}"
+        mode: +x
+        
+
+  # Install OneAgent (if not already installed)
+    - name: Install OneAgent
+      become: true
+      ansible.builtin.command: "/var/tmp/Dynatrace-OneAgent-latest.sh"
+      register: install_status
+
+    - name: Print status
+      ansible.builtin.debug:
+        msg: "{{ install_status }}"
+
+# # Ensure OneAgent Running
+# - name: EasyTravel
+#   hosts: automation-target
+# # Download EasyTravel installer
+
+# # Start EasyTravel
